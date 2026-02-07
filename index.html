@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Pantalla de inicio */
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            z-index: 2000;
+            transition: opacity 1s, visibility 1s;
+        }
+
+        .start-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .start-content {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .start-content h1 {
+            font-size: 3em;
+            color: #d946ef;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .start-content p {
+            font-size: 1.4em;
+            color: #555;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .heart-icon {
+            font-size: 5em;
+            animation: heartbeat 1.5s infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            padding: 20px 60px;
+            font-size: 1.5em;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+            transition: all 0.3s;
+            margin-top: 30px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+        }
+
+        /* Contenedor principal del álbum */
+        .album-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        /* Partículas de fondo */
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: float 6s infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-30px) translateX(20px);
+            }
+        }
+
+        /* Tarjeta de foto */
+        .photo-card {
+            position: absolute;
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s, transform 1s;
+            overflow: hidden;
+        }
+
+        .photo-card.active {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        .photo-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .photo-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Placeholder cuando no hay foto */
+        .photo-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            font-size: 8em;
+        }
+
+        .message-container {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .message-container h2 {
+            font-size: 1.8em;
+            color: #d946ef;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .message-container p {
+            font-size: 1.2em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Controles de navegación */
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 1.4em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d946ef;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Contador de fotos */
+        .counter {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            color: #d946ef;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        /* Corazones flotantes */
+        .floating-heart {
+            position: absolute;
+            font-size: 2em;
+            animation: floatHeart 4s infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-100px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0.5);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .start-content {
+                padding: 30px 20px;
+            }
+
+            .start-content h1 {
+                font-size: 2em;
+            }
+
+            .start-content p {
+                font-size: 1.1em;
+            }
+
+            .heart-icon {
+                font-size: 3.5em;
+            }
+
+            .start-btn {
+                padding: 15px 40px;
+                font-size: 1.2em;
+            }
+
+            .photo-card {
+                width: 95%;
+            }
+
+            .message-container {
+                padding: 20px;
+            }
+
+            .message-container h2 {
+                font-size: 1.4em;
+            }
+
+            .message-container p {
+                font-size: 1em;
+            }
+
+            .nav-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2em;
+            }
+
+            .navigation {
+                bottom: 15px;
+            }
+
+            .counter {
+                font-size: 0.9em;
+                padding: 8px 18px;
+                top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="start-screen" id="startScreen">
+        <div class="start-content">
+            <div class="heart-icon">💕</div>
+            <h1>Algo especial para ti linda jeje</h1>
+            <p>Preparé esto con mucho cariño...<br>Espero que te guste 😊🌸😁</p>
+            <button class="start-btn" id="startBtn">Abrir 🌸</button>
+        </div>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="BIRDS_OF_A_FEATHER.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Contenedor del álbum -->
+    <div class="album-container" id="albumContainer">
+        <!-- El contador -->
+        <div class="counter" id="counter">1 / 10</div>
+
+        <!-- Las tarjetas se generarán aquí -->
+    </div>
+
+    <!-- Navegación -->
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn">←</button>
+        <button class="nav-btn" id="nextBtn">→</button>
+    </div>
+
+    <script>
+        // Mensajes románticos para cada foto
+        const albumData = [
+            {
+                title: "Desde que te vi por ahi en facebook jiji...",
+                message: "No he podido dejar de pensar en ti. Hay algo en tu mirada que me cautivó desde el primer momento en que le di clic a esa sugerencia 😊💕",
+                photo: "fotos/foto1.jpg" 
+            },
+            {
+                title: "Tu sonrisa",
+                message: "Cada vez que sonríes iluminas mi día entero. Me encanta verte feliz y saber que existes 😊✨",
+                photo: "fotos/foto2.jpg" 
+            },
+            {
+                title: "Eres especial",
+                message: "No eres como las demás. Tienes algo único que me hace querer conocerte más cada día que pasa 🌟",
+                photo: "fotos/foto3.jpeg"
+            },
+            {
+                title: "Me haces sentir...",
+                message: "Cuando hablamos, aunque sea un poquito, mi corazón late diferente. Me haces sentir cosas que no esperaba 💓",
+                photo: "fotos/foto4.jpeg"
+            },
+            {
+                title: "Admiro tu fortaleza",
+                message: "Eres una mujer fuerte, valiente y luchadora. Admiro todo lo que eres y cómo enfrentas la vida 💪✨",
+                photo: "fotos/foto5.jpeg"
+            },
+            {
+                title: "Tu belleza",
+                message: "Eres hermosa por dentro y por fuera. Cada detalle tuyo me parece perfecto, desde tu forma de ser hasta tu mirada 🌸",
+                photo: "fotos/foto6.jpeg"
+            },
+            {
+                title: "Quiero estar cerca",
+                message: "Me gustaría poder estar más cerca de ti, conocerte mejor, escucharte, hacerte reír... estar contigo 💕",
+                photo: "fotos/foto7.jpg"
+            },
+            {
+                title: "Me gustas",
+                message: "No sé cómo decirlo de otra forma: me gustas. Y aunque apenas nos conocemos, siento algo lindo para tí 😊🌸",
+                photo: "fotos/foto8.jpeg"
+            },
+            {
+                title: "Eres importante",
+                message: "En tan poco tiempo he sentido que eres importante y especial. Pienso en ti más de lo que imaginas 😅🌹",
+                photo: "fotos/foto9.jpeg"
+            },
+            {
+                title: "Gracias por existir",
+                message: "Gracias por ser quien eres, por cruzarte en mi camino, por existir porque haces que los dias sean de color. Y quiero que lo sepas y lo tengas presente siempre jeje 💝",
+                photo: "fotos/foto10.jpeg"
+            }
+        ];
+
+        let currentIndex = 0;
+        const totalSlides = albumData.length;
+        const albumContainer = document.getElementById('albumContainer');
+        const counter = document.getElementById('counter');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
+        // Crear partículas de fondo
+        function createParticles() {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                albumContainer.appendChild(particle);
+            }
+        }
+
+        // Crear todas las tarjetas
+        function createCards() {
+            albumData.forEach((data, index) => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                if (index === 0) card.classList.add('active');
+
+                const photoContainer = document.createElement('div');
+                photoContainer.className = 'photo-container';
+
+                if (data.photo && data.photo !== '') {
+                    const img = document.createElement('img');
+                    img.src = data.photo;
+                    img.alt = data.title;
+                    photoContainer.appendChild(img);
+                } else {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'photo-placeholder';
+                    placeholder.textContent = '💖';
+                    photoContainer.appendChild(placeholder);
+                }
+
+                const messageContainer = document.createElement('div');
+                messageContainer.className = 'message-container';
+                messageContainer.innerHTML = `
+                    <h2>${data.title}</h2>
+                    <p>${data.message}</p>
+                `;
+
+                card.appendChild(photoContainer);
+                card.appendChild(messageContainer);
+                albumContainer.appendChild(card);
+            });
+        }
+
+        // Cambiar de foto
+        function showSlide(index) {
+            const cards = document.querySelectorAll('.photo-card');
+            cards.forEach(card => card.classList.remove('active'));
+            
+            if (cards[index]) {
+                cards[index].classList.add('active');
+                counter.textContent = `${index + 1} / ${totalSlides}`;
+                createFloatingHeart();
+            }
+        }
+
+        // Crear corazón flotante
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '💕';
+            heart.style.left = Math.random() * 80 + 10 + '%';
+            heart.style.bottom = '0';
+            albumContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Navegación
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            showSlide(currentIndex);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            showSlide(currentIndex);
+        });
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                showSlide(currentIndex);
+            } else if (e.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                showSlide(currentIndex);
+            }
+        });
+
+        // Soporte táctil (swipe)
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        albumContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        albumContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe left - siguiente
+                currentIndex = (currentIndex + 1) % totalSlides;
+                showSlide(currentIndex);
+            }
+            if (touchEndX > touchStartX + 50) {
+                // Swipe right - anterior
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                showSlide(currentIndex);
+            }
+        }
+
+        // Iniciar
+        document.getElementById('startBtn').addEventListener('click', () => {
+            document.getElementById('startScreen').classList.add('hidden');
+            
+            // Reproducir música
+            backgroundMusic.play().catch(error => {
+                console.log('Error al reproducir música:', error);
+            });
+
+            createParticles();
+            createCards();
+        });
+    </script>
+</body>
+</html>
