@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para ti 💕</title>
+    <title>💕</title>
     <style>
         * {
             margin: 0;
@@ -18,7 +18,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        /* Pantalla de inicio */
         .start-screen {
             position: fixed;
             top: 0;
@@ -98,7 +97,6 @@
             box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
         }
 
-        /* Contenedor principal del álbum */
         .album-container {
             position: relative;
             width: 100%;
@@ -110,7 +108,6 @@
             overflow: hidden;
         }
 
-        /* Partículas de fondo */
         .particle {
             position: absolute;
             width: 8px;
@@ -130,7 +127,6 @@
             }
         }
 
-        /* Tarjeta de foto */
         .photo-card {
             position: absolute;
             width: 90%;
@@ -167,7 +163,6 @@
             object-fit: cover;
         }
 
-        /* Placeholder cuando no hay foto */
         .photo-placeholder {
             position: absolute;
             top: 0;
@@ -199,7 +194,6 @@
             line-height: 1.6;
         }
 
-        /* Controles de navegación */
         .navigation {
             position: fixed;
             bottom: 20px;
@@ -236,7 +230,6 @@
             transform: scale(0.95);
         }
 
-        /* Contador de fotos */
         .counter {
             position: fixed;
             top: 15px;
@@ -252,7 +245,6 @@
             z-index: 100;
         }
 
-        /* Corazones flotantes */
         .floating-heart {
             position: absolute;
             font-size: 2em;
@@ -276,7 +268,6 @@
             }
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .start-content {
                 padding: 30px 20px;
@@ -347,22 +338,18 @@
         <source src="BIRDS_OF_A_FEATHER.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Contenedor del álbum -->
     <div class="album-container" id="albumContainer">
-        <!-- El contador -->
+        <!-- el contador -->
         <div class="counter" id="counter">1 / 10</div>
 
-        <!-- Las tarjetas se generarán aquí -->
     </div>
 
-    <!-- Navegación -->
     <div class="navigation">
         <button class="nav-btn" id="prevBtn">←</button>
         <button class="nav-btn" id="nextBtn">→</button>
     </div>
 
     <script>
-        // Mensajes románticos para cada foto
         const albumData = [
             {
                 title: "Desde que te vi por ahi en facebook jiji...",
@@ -422,7 +409,6 @@
         const counter = document.getElementById('counter');
         const backgroundMusic = document.getElementById('backgroundMusic');
 
-        // Crear partículas de fondo
         function createParticles() {
             for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('div');
@@ -434,7 +420,6 @@
             }
         }
 
-        // Crear todas las tarjetas
         function createCards() {
             albumData.forEach((data, index) => {
                 const card = document.createElement('div');
@@ -469,7 +454,6 @@
             });
         }
 
-        // Cambiar de foto
         function showSlide(index) {
             const cards = document.querySelectorAll('.photo-card');
             cards.forEach(card => card.classList.remove('active'));
@@ -481,7 +465,6 @@
             }
         }
 
-        // Crear corazón flotante
         function createFloatingHeart() {
             const heart = document.createElement('div');
             heart.className = 'floating-heart';
@@ -495,7 +478,6 @@
             }, 4000);
         }
 
-        // Navegación
         document.getElementById('prevBtn').addEventListener('click', () => {
             currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
             showSlide(currentIndex);
@@ -506,7 +488,6 @@
             showSlide(currentIndex);
         });
 
-        // Navegación con teclado
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') {
                 currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
@@ -517,7 +498,6 @@
             }
         });
 
-        // Soporte táctil (swipe)
         let touchStartX = 0;
         let touchEndX = 0;
 
@@ -532,22 +512,20 @@
 
         function handleSwipe() {
             if (touchEndX < touchStartX - 50) {
-                // Swipe left - siguiente
                 currentIndex = (currentIndex + 1) % totalSlides;
                 showSlide(currentIndex);
             }
             if (touchEndX > touchStartX + 50) {
-                // Swipe right - anterior
                 currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
                 showSlide(currentIndex);
             }
         }
 
-        // Iniciar
+        // iniciar
         document.getElementById('startBtn').addEventListener('click', () => {
             document.getElementById('startScreen').classList.add('hidden');
             
-            // Reproducir música
+            // reproducir música
             backgroundMusic.play().catch(error => {
                 console.log('Error al reproducir música:', error);
             });
